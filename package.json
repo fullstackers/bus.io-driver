@@ -12,8 +12,8 @@
   },
   "keywords": [
     "bus.io",
-    "common",
-    "component"
+    "test",
+    "driver"
   ],
   "author": "Nathan G. Romano",
   "license": "MIT",
