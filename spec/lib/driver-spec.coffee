@@ -36,8 +36,14 @@ describe 'Driver', ->
 
     describe '#with (message:Message)', ->
 
-      Given -> @res = @driver.with @messge
+      Given -> @res = @driver.with @message
       Then - expect(@res).toEqual @driver
+
+    describe '#with', ->
+
+      Given -> @driver.with @message
+      When ->  @res = @driver.with()
+      Then -> expect(@res).toEqual @message
 
     describe '#done (cb:Function)', ->
 
