@@ -13,8 +13,7 @@ Test driver your bus.io apps with driver.
 var driver = require('bus.io-driver');
 var bus = require('./bus.js');
 driver(bus)
-  .on('shout')
-  .with(Message().content('hi'))
+  .on(Message().content('hi'))
   .done(function (err, message) {
     if (err) throw err;
     assert.equal(message.content(), 'HI');
@@ -57,8 +56,7 @@ var bus = require('./my-bus.io-app.js');
 // test the "shout" message handler when going from the socekt to the bus
 
 driver(bus)
-  .in('shout')
-  .with(Message().content('hi')
+  .on(Message().action('shout').content('hi')
   .done(function (err, mesage) { 
     if (err) throw err;
     assert.equal(message.target(), 'everyone');
@@ -67,8 +65,7 @@ driver(bus)
 // test the "shout" message handler when processing on the bus
 
 driver(bus)
-  .on('shout')
-  .with(Message().content('hi))
+  .on(Message().action('shout').content('hi))
   .done(function (err, message0 {
     if (err) throw err;
     assert.equal(message.content(), 'HI');
@@ -78,8 +75,7 @@ driver(bus)
 // test the "shout" message handler when going from the bus to the socket
 
 driver(bus)
-  .on('shout')
-  .with(Message().content('HI'))
+  .on(Message().action('shout').content('HI'))
   .done(function (err, message) {
     if (err) throw err;
     assert.equal(message.content(), 'HI!!!');
@@ -92,9 +88,10 @@ Test the whole trip.
 
 ```javascript
 
+var message = Message().action('shout').content('hi');
+
 driver(bus)
-  .in('shout').on('shout').out('shout')
-  .with(Message().content('hi'))
+  .in(message).on(message).out(message)
   .done(function (err, message) {
     if (err) throw err;
     assert.equal(message.target(), 'everyone');
