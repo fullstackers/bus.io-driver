@@ -54,3 +54,23 @@ describe 'Driver', ->
       Given (done) -> @driver.done (err, message) -> done()
       Then -> expect(@message.target()).toBe 'everyone'
       And -> expect(@message.content()).toBe 'HI!!!'
+
+    describe '#step', ->
+
+      Given -> @receiver = @bus.incomming()
+      Given -> @listener = @bus.onReceivedSocket
+      Given -> @next = 'from exchange queue'
+      Given -> spyOn(@bus,['emit']).andCallThrough()
+      Given -> spyOn(@receiver,['removeListener']).andCallThrough()
+      Given -> spyOn(@receiver,['once']).andCallThrough()
+      Given -> spyOn(@receiver,['addListener']).andCallThrough()
+      Given -> spyOn(@receiver,['onReceive']).andCallThrough()
+      When (done) -> @driver.step @receiver, @listener, @next, @message, @socket, done
+      Then -> expect(@receiver.removeListener).toHaveBeenCalledWith 'received', @listener
+      And -> expect(@receiver.once).toHaveBeenCalledWith 'received', jasmine.any(Function)
+      And -> expect(@receiver.addListener).toHaveBeenCalledWith 'received', @listener
+      And -> expect(@bus.emit).toHaveBeenCalledWith @next, @message
+      And -> expect(@receiver.onReceive).toHaveBeenCalledWith @message, @socket
+
+
+
