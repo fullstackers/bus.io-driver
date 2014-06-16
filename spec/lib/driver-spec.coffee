@@ -72,5 +72,16 @@ describe 'Driver', ->
       And -> expect(@bus.emit).toHaveBeenCalledWith @next, @message
       And -> expect(@receiver.onReceive).toHaveBeenCalledWith @message, @socket
 
+    describe '#pushStep', ->
+
+      Given -> @receiver = @bus.incomming()
+      Given -> @listener = @bus.onReceivedSocket
+      Given -> @next = 'from exchange queue'
+      Given -> @cb = ->
+      Given -> spyOn(@driver,['step'])
+      Given -> @call = @driver.pushStep @receiver, @listener, @next, @message, @socket, @cb
+      When -> @call.call(@driver)
+      Then -> expect(@driver.step).toHaveBeenCalledWith @receiver, @listener, @next, @message, @socket, @cb
+
 
 
