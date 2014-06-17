@@ -63,7 +63,7 @@ driver(bus)
 // test the "shout" message handler when processing on the bus
 
 driver(bus)
-  .on(Message().action('shout').content('hi))
+  .on(Message().action('shout').content('hi'))
   .done(function (err, message0 {
     if (err) throw err;
     assert.equal(message.content(), 'HI');
