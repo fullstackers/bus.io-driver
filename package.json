@@ -1,6 +1,6 @@
 {
   "name": "bus.io-driver",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Test driver your bus.io apps",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "grunt-jasmine-bundle": "^0.2.0",
     "grunt-cli": "^0.1.13",
     "grunt": "^0.4.5",
-    "bus.io-common": "0.0.4",
-    "bus.io": "0.0.78-beta"
+    "bus.io-common": "0.0.5",
+    "bus.io": "*"
   }
 }
