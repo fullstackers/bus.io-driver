@@ -4,8 +4,6 @@
 
 ![Bus.IO](https://raw.github.com/turbonetix/bus.io/master/logo.png)
 
-# WIP
-
 Test driver your bus.io apps with driver.
 
 ```javascript
@@ -124,37 +122,49 @@ cd into the directory and install the dependencies
 var driver = require('bus.io-driver');
 var bus = require('./bus.js');
 
-```
-
-### Driver#in(event:String)
-
-```javascript
-
-driver.in('shout');
+var instance = driver(bus);
 
 ```
 
-### Driver#on(event:String)
+### Driver#(bus:Bus, socket:EventEmitter)
 
 ```javascript
 
-driver.on('shout');
+var events = require('events');
+var socket = new events.EventEmitter;
+var driver = require('bus.io-driver');
+var bus = require('./bus.js');
+var instance = driver(bus, socket);
 
 ```
 
-### Driver#out(event:String)
+### Driver#in(message:Message)
+
+Pipes the message through the `in()` receiver stack of middleware.
 
 ```javascript
 
-driver.out('shout');
+driver(bus).in(Message().action('shout'));
 
 ```
 
-### Driver#with(message:Message)
+### Driver#on(message:Message)
+
+Pipes the message through the `on()` receiver stack of middleware.
 
 ```javascript
 
-driver.with(Message().content('hi'));
+driver(bus).on(Message().action('shout'));
+
+```
+
+### Driver#out(message:Message)
+
+Pipes the message through the `out()` receiver stack of middleware.
+
+```javascript
+
+driver(bus).out(Message().action('shout'));
 
 ```
 
