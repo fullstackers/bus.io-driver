@@ -62,7 +62,7 @@ describe 'Driver', ->
       When -> @driver.out @message
       Then -> expect(@driver._step).toHaveBeenCalledWith @bus.outgoing(), @message
 
-    xdescribe '#done (cb:Function)', ->
+    describe '#done (cb:Function)', ->
 
       Given -> @driver.in @message
       Given -> @driver.on @message
