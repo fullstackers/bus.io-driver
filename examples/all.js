@@ -7,20 +7,17 @@
  */
 
 var bus = require('bus.io')();
-bus.in('shout', function (message, socket, next) {
-  console.log('in shout', message.id(), socket.id, next);
+bus.in('shout', function (msg, sock, next) {
   assert.equal(typeof next,'function','next() is a function');
-  message.content(message.content().toUpperCase()).target('everyone').deliver();
+  msg.content(msg.content().toUpperCase()).target('everyone').deliver();
 });
-bus.on('shout', function (message, next) {
-  console.log('on shout', message.id(), next);
+bus.on('shout', function (msg, next) {
   assert.equal(typeof next,'function','next() is a function');
-  message.content(message.content()+'!!').deliver();
+  msg.content(msg.content()+'!!').deliver();
 });
-bus.out('shout', function (message, socket, next) {
-  console.log('out shout', message, socket, next);
+bus.out('shout', function (msg, sock, next) {
   assert.equal(typeof next,'function','next() is a function');
-  message.content(message.content()+'!').deliver();
+  msg.content(msg.content()+'!').deliver();
 });
 
 /*
@@ -29,12 +26,12 @@ bus.out('shout', function (message, socket, next) {
 
 var assert = require('assert');
 var Message = require('bus.io-common').Message;
-var message = Message().action('shout').content('hi');
+var msg = Message().action('shout').content('hi');
 var driver = require('./..');
-driver(bus).in(message).on(message).out(message).done(function (err, message) {
+driver(bus).in(msg).on(msg).out(msg).done(function (err, msg) {
   if (err) throw err;
-  assert.equal(message.target(), 'everyone');
-  assert.equal(message.content(), 'HI!!!');
+  assert.equal(msg.target(), 'everyone');
+  assert.equal(msg.content(), 'HI!!!');
   process.exit();
 });
 
