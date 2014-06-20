@@ -4,7 +4,7 @@
 
 ![Bus.IO](https://raw.github.com/turbonetix/bus.io/master/logo.png)
 
-Test driver your bus.io apps with `bus.io-driver`.
+Test drive your bus.io apps with `bus.io-driver`.
 
 ```javascript
 var Message = require('bus.io-common').Message;
