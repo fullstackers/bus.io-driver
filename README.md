@@ -4,9 +4,10 @@
 
 ![Bus.IO](https://raw.github.com/turbonetix/bus.io/master/logo.png)
 
-Test driver your bus.io apps with driver.
+Test driver your bus.io apps with `bus.io-driver`.
 
 ```javascript
+var Message = require('bus.io-common').Message;
 var driver = require('bus.io-driver');
 var bus = require('bus.io')();
 bus.on(function (msg, next) {
@@ -79,7 +80,6 @@ driver(bus)
 Test the whole trip.
 
 ```javascript
-
 var msg = Message().action('shout').content('hi');
 
 driver(bus)
@@ -89,7 +89,6 @@ driver(bus)
     assert.equal(msg.target(), 'everyone');
     assert.equal(message.content(), 'HI!!!');
   });
-
 ```
 
 # Installation and Environment Setup
@@ -123,13 +122,11 @@ var instance = driver(bus);
 ### Driver#(bus:Bus, sock:EventEmitter)
 
 ```javascript
-
 var events = require('events');
 var sock = new events.EventEmitter;
 var driver = require('bus.io-driver');
 var bus = require('./bus.js');
 var instance = driver(bus, sock);
-
 ```
 
 ### Driver#in(msg:Message)
@@ -137,9 +134,7 @@ var instance = driver(bus, sock);
 Pipes the message through the `in()` receiver stack of middleware.
 
 ```javascript
-
 driver(bus).in(Message().action('shout'));
-
 ```
 
 ### Driver#on(msg:Message)
@@ -147,9 +142,7 @@ driver(bus).in(Message().action('shout'));
 Pipes the message through the `on()` receiver stack of middleware.
 
 ```javascript
-
 driver(bus).on(Message().action('shout'));
-
 ```
 
 ### Driver#out(msg:Message)
@@ -157,20 +150,16 @@ driver(bus).on(Message().action('shout'));
 Pipes the message through the `out()` receiver stack of middleware.
 
 ```javascript
-
 driver(bus).out(Message().action('shout'));
-
 ```
 
 ### Driver#done(cb:Function)
 
 ```javascript
-
 driver.done(function (err, msg) {
   if (err) throw nerr;
   assert.equal(msg.content(), 'HI!!!');
 });
-
 ```
 
 # Running Tests
@@ -189,4 +178,8 @@ To run the tests, just run grunt
 
     > grunt spec
 
-## TODO
+# Examples
+
+Examples are under the `examples/` directory.
+
+# TODO
