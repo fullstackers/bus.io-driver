@@ -7,16 +7,17 @@
 Test driver your bus.io apps with driver.
 
 ```javascript
-
 var driver = require('bus.io-driver');
-var bus = require('./bus.js');
+var bus = require('bus.io')();
+bus.on(function (msg, next) {
+  msg.content(msg.content().toUpperCase());
+});
 driver(bus)
   .on(Message().content('hi'))
-  .done(function (err, message) {
+  .done(function (err, msg) {
     if (err) throw err;
-    assert.equal(message.content(), 'HI');
+    assert.equal(msg.content(), 'HI');
   });
-
 ```
 
 # Examples
@@ -24,28 +25,24 @@ driver(bus)
 Say you want to test this bus.io app.
 
 ```javascript
-
 var bus = require('bus.io')();
 
-bus.in('shout', function (message, socket) {
-  message.target('everyone').deliver();
+bus.in('shout', function (msg, sock) {
+  msg.target('everyone').deliver();
 });
 
-bus.on('shout', function (message) {
-  message.content(message.content().toUpperCase()).deliver();
+bus.on('shout', function (msg) {
+  msg.content(msg.content().toUpperCase()).deliver();
 });
 
-bus.out('shout', function (message) {
-  message.content(message.content() + '!!!').deliver();
+bus.out('shout', function (msg) {
+  msg.content(msg.content() + '!!!').deliver();
 });
-
-
 ```
 
 You would do it like this with *driver*.
 
 ```javascript
-
 var driver = require('bus.io-driver');
 var assert = require('assert');
 var Message = require('bus.io-common').Message;
@@ -54,45 +51,42 @@ var bus = require('./my-bus.io-app.js');
 // test the "shout" message handler when going from the socekt to the bus
 
 driver(bus)
-  .on(Message().action('shout').content('hi')
+  .on(Message().action('shout').content('hi'))
   .done(function (err, mesage) { 
     if (err) throw err;
-    assert.equal(message.target(), 'everyone');
+    assert.equal(msg.target(), 'everyone');
   });
 
 // test the "shout" message handler when processing on the bus
 
 driver(bus)
   .on(Message().action('shout').content('hi'))
-  .done(function (err, message0 {
+  .done(function (err, ms) {
     if (err) throw err;
-    assert.equal(message.content(), 'HI');
+    assert.equal(msg.content(), 'HI');
   });
-
 
 // test the "shout" message handler when going from the bus to the socket
 
 driver(bus)
   .on(Message().action('shout').content('HI'))
-  .done(function (err, message) {
+  .done(function (err, msg) {
     if (err) throw err;
-    assert.equal(message.content(), 'HI!!!');
+    assert.equal(msg.content(), 'HI!!!');
   });
-
-
 ```
 
 Test the whole trip.
 
 ```javascript
 
-var message = Message().action('shout').content('hi');
+var msg = Message().action('shout').content('hi');
 
 driver(bus)
-  .in(message).on(message).out(message)
-  .done(function (err, message) {
+  .in(msg).on(msg).out(msg)
+  .done(function (err, msg) {
     if (err) throw err;
-    assert.equal(message.target(), 'everyone');
+    assert.equal(msg.target(), 'everyone');
     assert.equal(message.content(), 'HI!!!');
   });
 
@@ -126,19 +120,19 @@ var instance = driver(bus);
 
 ```
 
-### Driver#(bus:Bus, socket:EventEmitter)
+### Driver#(bus:Bus, sock:EventEmitter)
 
 ```javascript
 
 var events = require('events');
-var socket = new events.EventEmitter;
+var sock = new events.EventEmitter;
 var driver = require('bus.io-driver');
 var bus = require('./bus.js');
-var instance = driver(bus, socket);
+var instance = driver(bus, sock);
 
 ```
 
-### Driver#in(message:Message)
+### Driver#in(msg:Message)
 
 Pipes the message through the `in()` receiver stack of middleware.
 
@@ -148,7 +142,7 @@ driver(bus).in(Message().action('shout'));
 
 ```
 
-### Driver#on(message:Message)
+### Driver#on(msg:Message)
 
 Pipes the message through the `on()` receiver stack of middleware.
 
@@ -158,7 +152,7 @@ driver(bus).on(Message().action('shout'));
 
 ```
 
-### Driver#out(message:Message)
+### Driver#out(msg:Message)
 
 Pipes the message through the `out()` receiver stack of middleware.
 
@@ -172,9 +166,9 @@ driver(bus).out(Message().action('shout'));
 
 ```javascript
 
-driver.done(function (err, message) {
+driver.done(function (err, msg) {
   if (err) throw nerr;
-  assert.equal(message.content(), 'HI!!!');
+  assert.equal(msg.content(), 'HI!!!');
 });
 
 ```
